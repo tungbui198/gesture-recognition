@@ -26,7 +26,7 @@ vis_backends = [
     #     init_kwargs={
     #         'project': 'gesture-recognition',
     #         'entity': 'tungbui198-hust',
-    #         'name': 'stgcn_mediapipe_keypoint'
+    #         'name': 'stgcn++_mediapipe_keypoint'
     #     },
     # ),
 ]
@@ -40,6 +40,9 @@ model = dict(
     type="RecognizerGCN",
     backbone=dict(
         type="STGCN", 
+        gcn_adaptive='init',
+        gcn_with_res=True,
+        tcn_type='mstcn',
         graph_cfg=dict(
             layout=dict(
                 num_node=25,
@@ -52,7 +55,7 @@ model = dict(
                 ],
                 center = 0
             ), 
-            mode="stgcn_spatial"
+            mode="spatial"
         )
     ),
     cls_head=dict(type="GCNHead", num_classes=10, in_channels=256),
