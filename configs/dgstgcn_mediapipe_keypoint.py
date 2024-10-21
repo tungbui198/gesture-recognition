@@ -26,7 +26,7 @@ vis_backends = [
     #     init_kwargs={
     #         'project': 'gesture-recognition',
     #         'entity': 'tungbui198-hust',
-    #         'name': 'stgcn++_mmpose_keypoint'
+    #         'name': 'stgcn_mediapipe_keypoint'
     #     },
     # ),
 ]
@@ -39,12 +39,19 @@ resume = False
 model = dict(
     type="RecognizerGCN",
     backbone=dict(
-        type="STGCN", 
-        gcn_adaptive='init',
-        gcn_with_res=True,
-        tcn_type='mstcn',
+        type="DGSTGCN", 
         graph_cfg=dict(
-            layout="coco",
+            layout=dict(
+                num_node=25,
+                inward = [
+                    (18, 16), (20, 16), (22, 16), (16, 24), (14, 12),
+                    (17, 15), (19, 15), (21, 15), (15, 13), (13, 11),
+                    (24, 12), (12, 10), (10, 0), (23, 11), (11, 9), (9, 0),
+                    (8, 6), (6, 5), (5, 4), (4, 0), 
+                    (7, 3), (3, 2), (2, 1), (1, 0)
+                ],
+                center = 0
+            ), 
             mode="spatial"
         )
     ),
@@ -52,8 +59,8 @@ model = dict(
 )
 
 dataset_type = "PoseDataset"
-train_ann_file = "data/annotations/mmpose_train.pkl"
-test_ann_file = "data/annotations/mmpose_test.pkl"
+train_ann_file = "data/annotations/mediapipe_train.pkl"
+test_ann_file = "data/annotations/mediapipe_test.pkl"
 train_pipeline = [
     dict(type="PreNormalize2D"),
     dict(type="GenSkeFeat"),
